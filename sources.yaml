@@ -51,6 +51,30 @@ sources:
     cron_slot: "0 1 * * 1"
     note: "PHARMAC 공식 약가 스케줄 (월별 XML) — 정부 보조금·제조업체 공시가·병원 국가협상가 자동 추적"
 
+  nz_online_pharmacy_retail:
+    tier: 2
+    url_seed: "https://www.nz-online-pharmacy.com"
+    access_method: html_static
+    rate_limit_qps: 1.0
+    cron_slot: "25 23 * * *"
+    note: "현지 약사 직접 운영 온라인 약국 — 규정 소매가(Standard Retail Price) 수집"
+
+  pharmacydirect_retail:
+    tier: 2
+    url_seed: "https://www.pharmacydirect.co.nz"
+    access_method: html_static
+    rate_limit_qps: 1.0
+    cron_slot: "30 23 * * *"
+    note: "대형 의약품 DB 보유 온라인 약국 — 경쟁 제품 간 가격 비교 데이터 추출"
+
+  medsafe_consents:
+    tier: 1
+    url_seed: "https://www.medsafe.govt.nz"
+    access_method: playwright
+    rate_limit_qps: 0.3
+    cron_slot: "0 2 * * 1"
+    note: "Medsafe 품목허가 DB — 제품명·성분·스폰서·처방분류·허가일 수집 (8개 자사 제품 인허가 확인)"
+
   basic_files:
     tier: 2
     access_method: local_pdf
