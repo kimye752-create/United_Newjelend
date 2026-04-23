@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__Claude_Preview__preview_start",
+      "Bash(start notepad *)",
+      "Bash(python -m uvicorn frontend.server:app --host 127.0.0.1 --port 8765)",
+      "Bash(curl -s http://127.0.0.1:8765/api/settings/keys/status)",
+      "Bash(netstat -ano)",
+      "Bash(awk '{print $5}')",
+      "Bash(xargs -I{} taskkill /PID {} /F)",
+      "Bash(python -c ' *)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 8765 | Select-Object LocalAddress, LocalPort, OwningProcess; Get-Process -Id \\(Get-NetTCPConnection -LocalPort 8765 | Select-Object -First 1 -ExpandProperty OwningProcess\\) | Select-Object Id, Name, MainWindowTitle)",
+      "PowerShell(Stop-Process -Id 3436 -Force -ErrorAction SilentlyContinue)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 8765 -State Listen)",
+      "PowerShell(8765,8766,8767,8768,8769,8770,8780,8790,8800 | ForEach-Object { $p=$_; $conn=Get-NetTCPConnection -LocalPort $p -ErrorAction SilentlyContinue; if\\($conn\\) { Write-Host \"Port $p IN USE\" } else { Write-Host \"Port $p FREE\" } })",
+      "PowerShell(\\(Get-ChildItem \"C:\\\\dev\" -Directory\\).Name -join \"`n\")",
+      "PowerShell(\\(Get-ChildItem \"C:\\\\dev\\\\pkgs\" -Directory\\).Name -join \"`n\")",
+      "PowerShell(Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap\\($screen.Width, $screen.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.CopyFromScreen\\($screen.Location, [System.Drawing.Point]::Empty, $screen.Size\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_screenshot.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Start-Process \"chrome\" \"http://127.0.0.1:8790\"; Start-Sleep -Seconds 3; Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap\\($screen.Width, $screen.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.CopyFromScreen\\($screen.Location, [System.Drawing.Point]::Empty, $screen.Size\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_dashboard.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = [System.Drawing.Image]::FromFile\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_dashboard.png\"\\); $rect = [System.Drawing.Rectangle]::new\\(900, 130, 556, 100\\); $bmp = New-Object System.Drawing.Bitmap\\($rect.Width, $rect.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.DrawImage\\($src, [System.Drawing.Rectangle]::new\\(0,0,$rect.Width,$rect.Height\\), $rect, [System.Drawing.GraphicsUnit]::Pixel\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\topbar_right.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = [System.Drawing.Image]::FromFile\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_dashboard.png\"\\); $rect = [System.Drawing.Rectangle]::new\\(0, 130, 1456, 100\\); $bmp = New-Object System.Drawing.Bitmap\\($rect.Width, $rect.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.DrawImage\\($src, [System.Drawing.Rectangle]::new\\(0,0,$rect.Width,$rect.Height\\), $rect, [System.Drawing.GraphicsUnit]::Pixel\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\topbar_full.png\"\\); Write-Host \"Saved\")",
+      "PowerShell($response = Invoke-WebRequest -Uri \"http://127.0.0.1:8790\" -UseBasicParsing; $html = $response.Content; $start = $html.IndexOf\\(\"topbar-r\"\\); $html.Substring\\([Math]::Max\\(0, $start-100\\), 300\\))",
+      "PowerShell(Add-Type -AssemblyName System.Drawing; $src = [System.Drawing.Image]::FromFile\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_dashboard.png\"\\); $w = 306; $h = 90; $rect = New-Object System.Drawing.Rectangle\\(1150, 140, $w, $h\\); $bmp = New-Object System.Drawing.Bitmap\\($w, $h\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.DrawImage\\($src, \\(New-Object System.Drawing.Rectangle\\(0, 0, $w, $h\\)\\), $rect, [System.Drawing.GraphicsUnit]::Pixel\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\topbar_zoom.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Start-Process \"chrome\" \"http://127.0.0.1:8790\"; Start-Sleep -Seconds 3; Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap\\($screen.Width, $screen.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.CopyFromScreen\\($screen.Location, [System.Drawing.Point]::Empty, $screen.Size\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_v2.png\"\\); Write-Host \"Saved\")",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://127.0.0.1:8790\" -UseBasicParsing; $h = $r.Content; $i = $h.IndexOf\\(\"pill{\"\\); $h.Substring\\([Math]::Max\\(0, $i-20\\), 300\\))",
+      "PowerShell($r = Invoke-WebRequest -Uri \"http://127.0.0.1:8790\" -UseBasicParsing; $h = $r.Content; $start = $h.IndexOf\\(\"<header\"\\); $h.Substring\\($start, 450\\))",
+      "PowerShell(Start-Process \"chrome\" \"http://127.0.0.1:8790\"; Start-Sleep -Seconds 3; Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap\\($screen.Width, $screen.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.CopyFromScreen\\($screen.Location, [System.Drawing.Point]::Empty, $screen.Size\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_debug.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Start-Process \"chrome\" \"http://127.0.0.1:8790\"; Start-Sleep -Seconds 3; Add-Type -AssemblyName System.Windows.Forms; Add-Type -AssemblyName System.Drawing; $screen = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds; $bmp = New-Object System.Drawing.Bitmap\\($screen.Width, $screen.Height\\); $g = [System.Drawing.Graphics]::FromImage\\($bmp\\); $g.CopyFromScreen\\($screen.Location, [System.Drawing.Point]::Empty, $screen.Size\\); $bmp.Save\\(\"C:\\\\Users\\\\user\\\\Desktop\\\\nz_final.png\"\\); Write-Host \"Saved\")",
+      "PowerShell(Get-Process | Where-Object {$_.MainWindowTitle -ne \"\"} | Select-Object Name, MainWindowTitle | Format-Table -AutoSize)",
+      "PowerShell(Get-Process msedge | Where-Object {$_.MainWindowTitle -ne \"\"} | Select-Object Id, MainWindowTitle | Format-Table -AutoSize)",
+      "PowerShell(head -30)",
+      "Bash(python -c \"import httpx, asyncio; async def t\\(\\): async with httpx.AsyncClient\\(timeout=15, follow_redirects=True\\) as c: r = await c.get\\('https://www.medsafe.govt.nz/regulatory/Medicines/register.asp'\\); print\\(r.status_code, len\\(r.text\\)\\); print\\(r.text[:3000]\\); asyncio.run\\(t\\(\\)\\)\")"
+    ]
+  }
+}

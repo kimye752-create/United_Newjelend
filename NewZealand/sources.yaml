@@ -1,0 +1,58 @@
+# 뉴질랜드(NZ) 1공정 — 소스 메타
+country: "NZ"
+currency: "NZD"
+
+sources:
+  gets_procurement:
+    tier: 1
+    url_seed: "https://www.gets.govt.nz"
+    access_method: playwright
+    rate_limit_qps: 0.5
+    cron_slot: "0 23 * * 1"
+    note: "GETS 정부 전자입찰 포털 — PHARMAC·Health NZ 의약품 공급 입찰(ITT) 공고 모니터링"
+
+  chemistwarehouse_retail:
+    tier: 1
+    url_seed: "https://www.chemistwarehouse.co.nz"
+    access_method: playwright
+    rate_limit_qps: 0.3
+    cron_slot: "5 23 * * *"
+    note: "뉴질랜드 최대 할인 약국 체인 — 처방약·OTC·건강보조식품 소매가·프로모션 최저가 실시간 수집"
+
+  lifepharmacy_retail:
+    tier: 2
+    url_seed: "https://www.lifepharmacy.co.nz"
+    access_method: html_static
+    rate_limit_qps: 0.5
+    cron_slot: "10 23 * * *"
+    note: "프리미엄 약국 체인 — 전문의약품·만성질환 관리용 의료기기 표준 소매가(Standard Price) 분석"
+
+  netpharmacy_retail:
+    tier: 2
+    url_seed: "https://www.netpharmacy.co.nz"
+    access_method: html_static
+    rate_limit_qps: 1.0
+    cron_slot: "15 23 * * *"
+    note: "온라인 약국 — 만성질환 치료제·보조제 할인가, 원격 처방 연계 비급여 소매가"
+
+  bargainchemist_retail:
+    tier: 2
+    url_seed: "https://www.bargainchemist.co.nz"
+    access_method: html_static
+    rate_limit_qps: 1.0
+    cron_slot: "20 23 * * *"
+    note: "저가 지향형 약국 체인 — Pharmacist Only 포함 실질 조제 비용·최저가 트렌드 벤치마킹"
+
+  pharmac_schedule:
+    tier: 1
+    url_seed: "https://schedule.pharmac.govt.nz"
+    access_method: xml_api
+    rate_limit_qps: 0.2
+    cron_slot: "0 1 * * 1"
+    note: "PHARMAC 공식 약가 스케줄 (월별 XML) — 정부 보조금·제조업체 공시가·병원 국가협상가 자동 추적"
+
+  basic_files:
+    tier: 2
+    access_method: local_pdf
+    path: "datas/basic_files/"
+    note: "제품 브로슈어 — 임상 근거 및 제품 규격"
