@@ -30,3 +30,69 @@ services:
         sync: false
       - key: NO_PROXY
         value: ".supabase.co"
+
+  # NZ 소매 약국 6개 체인 - 매일 UTC 11시 (NZST/NZDT 기준 밤 11~12시)
+  - type: cron
+    name: nz-retail-crawler
+    runtime: python
+    schedule: "0 11 * * *"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/run_all_crawlers.py --mode retail
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PLAYWRIGHT_LIVE
+        value: "0"
+
+  # PHARMAC 공식 월별 약가표 - 매주 월요일 UTC 13시
+  - type: cron
+    name: nz-pharmac-schedule
+    runtime: python
+    schedule: "0 13 * * 1"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/run_all_crawlers.py --mode pharmac
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+
+  # GETS 공공조달 입찰/낙찰 - 매주 월요일 UTC 14시
+  - type: cron
+    name: nz-gets-crawler
+    runtime: python
+    schedule: "0 14 * * 1"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/run_all_crawlers.py --mode gets
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PLAYWRIGHT_LIVE
+        value: "0"
+
+  # Medsafe 품목허가 - 매주 월요일 UTC 15시 (8개 제품 인허가 갱신)
+  - type: cron
+    name: nz-medsafe-crawler
+    runtime: python
+    schedule: "0 15 * * 1"
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/run_all_crawlers.py --mode medsafe
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.13.1
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_KEY
+        sync: false
+      - key: PLAYWRIGHT_LIVE
+        value: "0"

@@ -2072,6 +2072,100 @@ async def nz_buyers_one(company_key: str) -> JSONResponse:
         return JSONResponse({"ok": False, "error": str(exc)}, status_code=500)
 
 
+# ── NZ 크롤러 데이터 API (실시간 크롤링 결과 조회) ────────────────────────────
+
+@app.get("/api/nz/retail-prices")
+async def nz_retail_prices_api(
+    inn_name: str | None = None,
+    source_site: str | None = None,
+    limit: int = 500,
+) -> JSONResponse:
+    """nz_retail_prices — 6개 NZ 소매 약국 체인 통합 가격 조회."""
+    try:
+        from utils.db import fetch_nz_retail_prices
+        rows = fetch_nz_retail_prices(inn_name=inn_name, source_site=source_site, limit=limit)
+        return JSONResponse({"ok": True, "count": len(rows), "rows": rows})
+    except Exception as exc:
+        return JSONResponse({"ok": False, "error": str(exc)[:300], "rows": []}, status_code=500)
+
+
+@app.get("/api/nz/gets-tenders")
+async def nz_gets_tenders_api(
+    inn_name: str | None = None,
+    agency: str | None = None,
+    limit: int = 200,
+) -> JSONResponse:
+    """nz_gets_tenders — GETS 공공조달 낙찰 이력 조회."""
+    try:
+        from utils.db import fetch_nz_gets_tenders
+        rows = fetch_nz_gets_tenders(inn_name=inn_name, agency=agency, limit=limit)
+        return JSONResponse({"ok": True, "count": len(rows), "rows": rows})
+    except Exception as exc:
+        return JSONResponse({"ok": False, "error": str(exc)[:300], "rows": []}, status_code=500)
+
+
+@app.get("/api/nz/pharmac-schedule")
+async def nz_pharmac_schedule_api(
+    inn_name: str | None = None,
+    funded_only: bool = False,
+    limit: int = 500,
+) -> JSONResponse:
+    """nz_pharmac_schedule — PHARMAC 공식 월별 약가표 조회."""
+    try:
+        from utils.db import fetch_nz_pharmac_schedule
+        rows = fetch_nz_pharmac_schedule(inn_name=inn_name, funded_only=funded_only, limit=limit)
+        return JSONResponse({"ok": True, "count": len(rows), "rows": rows})
+    except Exception as exc:
+        return JSONResponse({"ok": False, "error": str(exc)[:300], "rows": []}, status_code=500)
+
+
+@app.get("/api/nz/medsafe-consents")
+async def nz_medsafe_consents_api(
+    inn_name: str | None = None,
+    limit: int = 200,
+) -> JSONResponse:
+    """nz_medsafe_consents — Medsafe 품목허가 조회 (inn_name 없으면 전체)."""
+    try:
+        from utils.db import fetch_nz_medsafe_consents
+        rows = fetch_nz_medsafe_consents(inn_name=inn_name, limit=limit)
+        return JSONResponse({"ok": True, "count": len(rows), "rows": rows})
+    except Exception as exc:
+        return JSONResponse({"ok": False, "error": str(exc)[:300], "rows": []}, status_code=500)
+
+
+@app.get("/api/nz/summary")
+async def nz_summary_api(inn_name: str) -> JSONResponse:
+    """특정 INN에 대한 소매가·조달·PHARMAC·Medsafe 통합 요약."""
+    try:
+        from utils.db import (
+            fetch_nz_retail_prices,
+            fetch_nz_gets_tenders,
+            fetch_nz_pharmac_schedule,
+            fetch_nz_medsafe_consents,
+        )
+        retail = fetch_nz_retail_prices(inn_name=inn_name, limit=200)
+        tenders = fetch_nz_gets_tenders(inn_name=inn_name, limit=50)
+        pharmac = fetch_nz_pharmac_schedule(inn_name=inn_name, limit=50)
+        medsafe = fetch_nz_medsafe_consents(inn_name=inn_name, limit=50)
+        retail_prices = [r.get("price_nzd") for r in retail if r.get("price_nzd") is not None]
+        return JSONResponse({
+            "ok": True,
+            "inn_name": inn_name,
+            "retail": {
+                "count": len(retail),
+                "min_price_nzd": min(retail_prices) if retail_prices else None,
+                "max_price_nzd": max(retail_prices) if retail_prices else None,
+                "avg_price_nzd": (sum(retail_prices) / len(retail_prices)) if retail_prices else None,
+                "rows": retail,
+            },
+            "gets_tenders":   {"count": len(tenders), "rows": tenders},
+            "pharmac":        {"count": len(pharmac), "rows": pharmac},
+            "medsafe":        {"count": len(medsafe), "rows": medsafe},
+        })
+    except Exception as exc:
+        return JSONResponse({"ok": False, "error": str(exc)[:300]}, status_code=500)
+
+
 app.mount("/static", StaticFiles(directory=str(STATIC)), name="static")
 
 

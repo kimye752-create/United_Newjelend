@@ -77,3 +77,77 @@ def upsert_product(row: dict[str, Any]) -> bool:
         return True
     except Exception:
         return False
+
+
+# ── NZ 크롤러 전용 테이블 래퍼 ───────────────────────────────────────────────
+
+def fetch_nz_retail_prices(
+    inn_name: str | None = None,
+    source_site: str | None = None,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    """nz_retail_prices — 6개 소매 약국 체인 통합 가격 데이터."""
+    sb = get_client()
+    q = sb.table("nz_retail_prices").select("*")
+    if inn_name:
+        q = q.ilike("inn_name", f"%{inn_name}%")
+    if source_site:
+        q = q.eq("source_site", source_site)
+    r = q.order("crawled_at", desc=True).limit(limit).execute()
+    return r.data or []
+
+
+def fetch_nz_gets_tenders(
+    inn_name: str | None = None,
+    agency: str | None = None,
+    limit: int = 200,
+) -> list[dict[str, Any]]:
+    """nz_gets_tenders — GETS 공공조달 낙찰 이력."""
+    sb = get_client()
+    q = sb.table("nz_gets_tenders").select("*")
+    if inn_name:
+        q = q.ilike("inn_name", f"%{inn_name}%")
+    if agency:
+        q = q.ilike("agency", f"%{agency}%")
+    r = q.order("contract_start", desc=True).limit(limit).execute()
+    return r.data or []
+
+
+def fetch_nz_pharmac_schedule(
+    inn_name: str | None = None,
+    funded_only: bool = False,
+    limit: int = 500,
+) -> list[dict[str, Any]]:
+    """nz_pharmac_schedule — PHARMAC 공식 월별 약가표."""
+    sb = get_client()
+    q = sb.table("nz_pharmac_schedule").select("*")
+    if inn_name:
+        q = q.ilike("inn_name", f"%{inn_name}%")
+    if funded_only:
+        q = q.eq("funded", True)
+    r = q.order("updated_at", desc=True).limit(limit).execute()
+    return r.data or []
+
+
+def fetch_nz_medsafe_consents(
+    inn_name: str | None = None,
+    limit: int = 200,
+) -> list[dict[str, Any]]:
+    """nz_medsafe_consents — Medsafe 품목허가 기록."""
+    sb = get_client()
+    q = sb.table("nz_medsafe_consents").select("*")
+    if inn_name:
+        q = q.ilike("inn_name", f"%{inn_name}%")
+    r = q.order("updated_at", desc=True).limit(limit).execute()
+    return r.data or []
+
+
+def upsert_nz_retail_price(row: dict[str, Any]) -> bool:
+    """nz_retail_prices에 insert (중복 정책은 스키마의 unique constraint 의존)."""
+    sb = get_client()
+    row.setdefault("crawled_at", datetime.now(timezone.utc).isoformat())
+    try:
+        sb.table("nz_retail_prices").insert(row).execute()
+        return True
+    except Exception:
+        return False
